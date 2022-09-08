@@ -1,27 +1,39 @@
 " variables
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_winsize = 15
 let $plugindir = '~/.config/nvim/plugged'
-let $undodir = '~/tmp/.vim-undo-dir' 
+let $undodir = '/tmp/.vim-undo-dir' 
+
 if has("win32")
     let $plugindir = 'C:\Users\vishn\AppData\Local\nvim\plugged'
     let $undodir = 'C:\Users\vishn\AppData\Local\nvim\tmp\.vim-undo-dir'
 endif
-    
+
 " plugins 
 call plug#begin($plugindir)
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'APZelos/blamer.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 Plug 'nvim-lualine/lualine.nvim'
-Plug 'kyazdani42/nvim-web-devicons' 
-Plug 'kyazdani42/nvim-tree.lua'
 Plug 'tpope/vim-commentary'
-Plug 'airblade/vim-gitgutter'
+Plug 'lewis6991/gitsigns.nvim' 
 call plug#end()
 
-lua require("nvim-tree").setup()
-lua require('lualine').setup()
+" lua code
+lua << EOF
+require('lualine').setup();
+require('gitsigns').setup {
+    current_line_blame = true, 
+    current_line_blame_opts = {
+        delay = 500,        
+    },
+    current_line_blame_formatter_opts = {
+        relative_time = true
+    }
+}
+EOF
 
 " settings
 set nocompatible                                     " disable compatibility to old-time vi
@@ -38,7 +50,7 @@ set shiftwidth=4                                     " width for autoindents
 set softtabstop=4                                    " see multiple spaces as tabstops so <BS> does the right thing
 set mouse=a                                          " for scrolling with mouse
 set clipboard=unnamedplus                            " use common clipboard
-set undodir=$undodir                                  " set undo stack directory
+set undodir=$undodir                                 " set undo stack directory
 set undofile                                         " save undo stack to the specified directory
 set nobackup                                         " coc specific 
 set nowritebackup                                    " coc specific 
@@ -46,7 +58,7 @@ set updatetime=300                                   " coc update time
 set signcolumn=yes                                   " coc always show the single column
 syntax on                                            " syntax highlighting              
 filetype plugin indent on                            " allows auto-indenting depending on file type
-colorscheme onehalfdark                              " color scheme 
+colorscheme tokyonight-night                         " color scheme 
 highlight CocFloating ctermbg=0|                     " match coc popup to onehalfdark background color
 
 " leader mappings
@@ -60,14 +72,16 @@ nnoremap <leader>l 15<C-w><
 nnoremap <leader>r 15<C-w>>
 nnoremap <leader>d 10<C-w>+
 nnoremap <leader>u 10<C-w>-
+nnoremap <leader>n :Lexplore<CR>
 nnoremap <leader>f :Telescope find_files<CR>
 nnoremap <leader>s :Telescope live_grep<CR>
 nnoremap <leader>b :Telescope buffers<CR>
-nnoremap <leader>g :Telescope grep_string<CR>
-nnoremap <leader>n :NvimTreeToggle<CR>
+nnoremap <leader>c :Telescope grep_string<CR>
 nnoremap <leader>a  <Plug>(coc-codeaction-selected)<CR>
 nnoremap <leader>ep <Plug>(coc-diagnostic-prev)
 nnoremap <leader>en <Plug>(coc-diagnostic-next)
+nnoremap <leader>gh :Gitsigns preview_hunk<CR>
+nnoremap <leader>gd :Gitsigns diffthis<CR>
 
 " arrow mappings
 nnoremap <up> <C-w><up>
@@ -89,19 +103,12 @@ inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm(): "\<C-g>u\<CR
 " other mappings
 nnoremap <expr> <CR> {-> v:hlsearch ? ":nohl\<CR>" : "\<CR>"}()
 
-" global variables
-let g:blamer_enabled = 1 
-let g:blamer_relative_time = 1
-let g:blamer_delay = 500
-
 function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" onehalfdark needs this for proper colors
-if exists('+termguicolors')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
+" create undo stack directory,  if not exists
+if !isdirectory($undodir)
+    call mkdir($undodir, "", 0700)
 endif
