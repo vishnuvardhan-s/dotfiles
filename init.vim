@@ -12,18 +12,21 @@ endif
 
 " plugins 
 call plug#begin($plugindir)
-Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'tpope/vim-commentary'
 Plug 'lewis6991/gitsigns.nvim' 
+Plug 'kyazdani42/nvim-tree.lua',
+Plug 'kyazdani42/nvim-web-devicons' 
 call plug#end()
 
 " lua code
 lua << EOF
-require('lualine').setup();
+require('lualine').setup()
+require("nvim-tree").setup()
 require('gitsigns').setup {
     current_line_blame = true, 
     current_line_blame_opts = {
@@ -58,7 +61,7 @@ set updatetime=300                                   " coc update time
 set signcolumn=yes                                   " coc always show the single column
 syntax on                                            " syntax highlighting              
 filetype plugin indent on                            " allows auto-indenting depending on file type
-colorscheme tokyonight-night                         " color scheme 
+colorscheme onehalfdark                              " color scheme
 highlight CocFloating ctermbg=0|                     " match coc popup to onehalfdark background color
 
 " leader mappings
@@ -72,7 +75,7 @@ nnoremap <leader>l 15<C-w><
 nnoremap <leader>r 15<C-w>>
 nnoremap <leader>d 10<C-w>+
 nnoremap <leader>u 10<C-w>-
-nnoremap <leader>n :Lexplore<CR>
+nnoremap <leader>n :NvimTreeFindFile<CR>
 nnoremap <leader>f :Telescope find_files<CR>
 nnoremap <leader>s :Telescope live_grep<CR>
 nnoremap <leader>b :Telescope buffers<CR>
@@ -111,4 +114,11 @@ endfunction
 " create undo stack directory,  if not exists
 if !isdirectory($undodir)
     call mkdir($undodir, "", 0700)
+endif
+
+" for onehalfdark colorscheme
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
 endif
