@@ -85,6 +85,9 @@ nnoremap <leader>ep <Plug>(coc-diagnostic-prev)
 nnoremap <leader>en <Plug>(coc-diagnostic-next)
 nnoremap <leader>gh :Gitsigns preview_hunk<CR>
 nnoremap <leader>gd :Gitsigns diffthis<CR>
+nnoremap <leader>gc :Telescope git_commits<CR>
+nnoremap <leader>gb :Telescope git_branches<CR>
+nnoremap <leader>gs :Telescope git_status<CR>
 
 " arrow mappings
 nnoremap <up> <C-w><up>
@@ -98,12 +101,17 @@ nnoremap <silent> gt <Plug>(coc-type-definition)
 nnoremap <silent> gi <Plug>(coc-implementation)
 nnoremap <silent> gr <Plug>(coc-references)
 
+" capital letter mappings 
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
 " insert mode mappings
 inoremap <silent><expr> <TAB> coc#pum#visible() ? coc#pum#next(1): CheckBackspace() ? "\<Tab>" : coc#refresh()
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm(): "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " other mappings
+nnoremap , {
+nnoremap ; }
 nnoremap <expr> <CR> {-> v:hlsearch ? ":nohl\<CR>" : "\<CR>"}()
 
 function! CheckBackspace() abort
@@ -122,3 +130,12 @@ if exists('+termguicolors')
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
+
+" functions
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
