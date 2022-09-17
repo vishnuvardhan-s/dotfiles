@@ -19,8 +19,8 @@ Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'tpope/vim-commentary'
 Plug 'lewis6991/gitsigns.nvim' 
-Plug 'kyazdani42/nvim-tree.lua',
-Plug 'kyazdani42/nvim-web-devicons' 
+Plug 'kyazdani42/nvim-tree.lua'
+Plug 'kyazdani42/nvim-web-devicons'
 call plug#end()
 
 " lua code
@@ -35,6 +35,15 @@ require('gitsigns').setup {
     current_line_blame_formatter_opts = {
         relative_time = true
     }
+}
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      i = {
+        ["<CR>"] = require('telescope.actions').select_tab
+      }
+    }
+  }
 }
 EOF
 
@@ -59,6 +68,8 @@ set nobackup                                         " coc specific
 set nowritebackup                                    " coc specific 
 set updatetime=300                                   " coc update time
 set signcolumn=yes                                   " coc always show the single column
+set scrolloff=10                                     " make it so there are always ten lines below my cursor
+set showtabline=2                                    " for tabline on top
 syntax on                                            " syntax highlighting              
 filetype plugin indent on                            " allows auto-indenting depending on file type
 colorscheme onehalfdark                              " color scheme
@@ -100,6 +111,8 @@ nnoremap <silent> gd <Plug>(coc-definition)
 nnoremap <silent> gt <Plug>(coc-type-definition)
 nnoremap <silent> gi <Plug>(coc-implementation)
 nnoremap <silent> gr <Plug>(coc-references)
+nnoremap <silent> gp :tabp<CR>
+nnoremap <silent> gn :tabn<CR>
 
 " capital letter mappings 
 nnoremap <silent> K :call ShowDocumentation()<CR>
@@ -110,8 +123,6 @@ inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm(): "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " other mappings
-nnoremap , {
-nnoremap ; }
 nnoremap <expr> <CR> {-> v:hlsearch ? ":nohl\<CR>" : "\<CR>"}()
 
 function! CheckBackspace() abort
@@ -139,3 +150,6 @@ function! ShowDocumentation()
     call feedkeys('K', 'in')
   endif
 endfunction
+
+" customizations
+autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup=(vim.fn['hlexists']('HighlightedyankRegion') > 0 and 'HighlightedyankRegion' or 'IncSearch'), timeout=150}
