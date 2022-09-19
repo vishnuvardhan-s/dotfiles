@@ -25,8 +25,37 @@ call plug#end()
 
 " lua code
 lua << EOF
-require('lualine').setup()
-require("nvim-tree").setup()
+require("lualine").setup {
+	tabline = {
+		lualine_a = {
+			{
+				"buffers",
+				right_padding = 2,
+				symbols = { alternate_file = "" },
+			},
+		},
+	},
+}
+
+vim.cmd [[autocmd VimResized * lua require'nvim-tree.view'.View.width=NvimTreeWidth()]]
+
+function NvimTreeWidth()
+    local winwidth = vim.fn.winwidth(0)
+    if winwidth <= 100 then
+        return 30
+    elseif winwidth <= 200 then
+        return 40
+    else
+        return 50
+    end
+end
+
+require("nvim-tree").setup{
+    view = {
+        width = NvimTreeWidth(),
+    },
+}
+
 require('gitsigns').setup {
     current_line_blame = true, 
     current_line_blame_opts = {
@@ -35,15 +64,6 @@ require('gitsigns').setup {
     current_line_blame_formatter_opts = {
         relative_time = true
     }
-}
-require('telescope').setup{
-  defaults = {
-    mappings = {
-      i = {
-        ["<CR>"] = require('telescope.actions').select_tab
-      }
-    }
-  }
 }
 EOF
 
@@ -69,11 +89,9 @@ set nowritebackup                                    " coc specific
 set updatetime=300                                   " coc update time
 set signcolumn=yes                                   " coc always show the single column
 set scrolloff=10                                     " make it so there are always ten lines below my cursor
-set showtabline=2                                    " for tabline on top
 syntax on                                            " syntax highlighting              
 filetype plugin indent on                            " allows auto-indenting depending on file type
 colorscheme onehalfdark                              " color scheme
-highlight CocFloating ctermbg=0|                     " match coc popup to onehalfdark background color
 
 " leader mappings
 let mapleader=" "
@@ -111,8 +129,6 @@ nnoremap <silent> gd <Plug>(coc-definition)
 nnoremap <silent> gt <Plug>(coc-type-definition)
 nnoremap <silent> gi <Plug>(coc-implementation)
 nnoremap <silent> gr <Plug>(coc-references)
-nnoremap <silent> gp :tabp<CR>
-nnoremap <silent> gn :tabn<CR>
 
 " capital letter mappings 
 nnoremap <silent> K :call ShowDocumentation()<CR>
