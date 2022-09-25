@@ -26,6 +26,9 @@ call plug#end()
 " lua code
 lua << EOF
 require("lualine").setup {
+    options = {
+        globalstatus = true,
+    },
 	tabline = {
 		lualine_a = {
 			{
@@ -50,10 +53,10 @@ function NvimTreeWidth()
     end
 end
 
-require("nvim-tree").setup{
+require("nvim-tree").setup {
     view = {
         width = NvimTreeWidth(),
-    },
+    }
 }
 
 require('gitsigns').setup {
@@ -64,6 +67,19 @@ require('gitsigns').setup {
     current_line_blame_formatter_opts = {
         relative_time = true
     }
+}
+
+require('telescope').setup {
+  pickers = {
+    buffers = {
+        theme = "dropdown",
+        previewer = false
+    },
+    find_files = {
+        theme = "dropdown",
+        previewer= false
+    }
+  }
 }
 EOF
 
@@ -107,7 +123,7 @@ nnoremap <leader>u 10<C-w>-
 nnoremap <leader>n :NvimTreeFindFile<CR>
 nnoremap <leader>f :Telescope find_files<CR>
 nnoremap <leader>s :Telescope live_grep<CR>
-nnoremap <leader>b :Telescope buffers<CR>
+nnoremap <leader>o :Telescope buffers<CR>
 nnoremap <leader>c :Telescope grep_string<CR>
 nnoremap <leader>a  <Plug>(coc-codeaction-selected)<CR>
 nnoremap <leader>ep <Plug>(coc-diagnostic-prev)
