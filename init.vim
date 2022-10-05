@@ -90,6 +90,7 @@ set ignorecase                                       " case insensitive matching
 set hlsearch                                         " highlight search results
 set autoindent                                       " indent a new line the same amount as the line just typed
 set number                                           " add line numbers
+set nowrap                                           " dont wrap lines
 set relativenumber                                   " add relative line numebrs
 set wildmode=longest,list                            " get bash-like tab completions
 set tabstop=4                                        " number of columns occupied by a tab character
@@ -148,6 +149,7 @@ nnoremap <silent> gr <Plug>(coc-references)
 
 " capital letter mappings 
 nnoremap <silent> K :call ShowDocumentation()<CR>
+nnoremap <silent> Y v$h
 
 " insert mode mappings
 inoremap <silent><expr> <TAB> coc#pum#visible() ? coc#pum#next(1): CheckBackspace() ? "\<Tab>" : coc#refresh()
