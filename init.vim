@@ -1,7 +1,4 @@
 " variables
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_winsize = 15
 let $plugindir = '~/.config/nvim/plugged'
 let $undodir = '/tmp/.vim-undo-dir' 
 
@@ -15,7 +12,7 @@ call plug#begin($plugindir)
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'tpope/vim-commentary'
 Plug 'lewis6991/gitsigns.nvim' 
@@ -187,3 +184,4 @@ endfunction
 
 " customizations
 autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup=(vim.fn['hlexists']('HighlightedyankRegion') > 0 and 'HighlightedyankRegion' or 'IncSearch'), timeout=150}
+highlight gitsignscurrentlineblame guibg=#fff guifg=#a9a9a9
