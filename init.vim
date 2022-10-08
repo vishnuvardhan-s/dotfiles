@@ -9,7 +9,7 @@ endif
 
 " plugins 
 call plug#begin($plugindir)
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
@@ -19,66 +19,6 @@ Plug 'lewis6991/gitsigns.nvim'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'kyazdani42/nvim-web-devicons'
 call plug#end()
-
-" lua code
-lua << EOF
-require("lualine").setup {
-    options = {
-        globalstatus = true,
-    },
-	tabline = {
-		lualine_a = {
-			{
-				"buffers",
-				right_padding = 2,
-				symbols = { alternate_file = "" },
-			},
-		},
-	},
-}
-
-vim.cmd [[autocmd VimResized * lua require'nvim-tree.view'.View.width=NvimTreeWidth()]]
-
-function NvimTreeWidth()
-    local winwidth = vim.fn.winwidth(0)
-    if winwidth <= 100 then
-        return 30
-    elseif winwidth <= 200 then
-        return 40
-    else
-        return 50
-    end
-end
-
-require("nvim-tree").setup {
-    view = {
-        width = NvimTreeWidth(),
-    }
-}
-
-require('gitsigns').setup {
-    current_line_blame = true, 
-    current_line_blame_opts = {
-        delay = 500,        
-    },
-    current_line_blame_formatter_opts = {
-        relative_time = true
-    }
-}
-
-require('telescope').setup {
-  pickers = {
-    buffers = {
-        theme = "dropdown",
-        previewer = false
-    },
-    find_files = {
-        theme = "dropdown",
-        previewer= false
-    }
-  }
-}
-EOF
 
 " settings
 set nocompatible                                     " disable compatibility to old-time vi
@@ -105,7 +45,7 @@ set signcolumn=yes                                   " coc always show the singl
 set scrolloff=10                                     " make it so there are always ten lines below my cursor
 syntax on                                            " syntax highlighting              
 filetype plugin indent on                            " allows auto-indenting depending on file type
-colorscheme onehalfdark                              " color scheme
+colorscheme catppuccin                               " color scheme
 
 " leader mappings
 let mapleader=" "
@@ -166,13 +106,6 @@ if !isdirectory($undodir)
     call mkdir($undodir, "", 0700)
 endif
 
-" for onehalfdark colorscheme
-if exists('+termguicolors')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
-
 " functions
 function! ShowDocumentation()
   if CocAction('hasProvider', 'hover')
@@ -185,3 +118,81 @@ endfunction
 " customizations
 autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup=(vim.fn['hlexists']('HighlightedyankRegion') > 0 and 'HighlightedyankRegion' or 'IncSearch'), timeout=150}
 highlight gitsignscurrentlineblame guibg=#fff guifg=#a9a9a9
+
+" lua code
+lua << EOF
+require("lualine").setup {
+    options = {
+        globalstatus = true,
+    },
+	tabline = {
+		lualine_a = {
+			{
+				"buffers",
+				right_padding = 2,
+				symbols = { alternate_file = "" },
+			},
+		},
+	},
+}
+
+vim.cmd [[autocmd VimResized * lua require'nvim-tree.view'.View.width=NvimTreeWidth()]]
+
+function NvimTreeWidth()
+    local winwidth = vim.fn.winwidth(0)
+    if winwidth <= 100 then
+        return 30
+    elseif winwidth <= 200 then
+        return 40
+    else
+        return 50
+    end
+end
+
+require("nvim-tree").setup {
+    view = {
+        width = NvimTreeWidth(),
+    }
+}
+
+require('gitsigns').setup {
+    current_line_blame = true, 
+    current_line_blame_opts = {
+        delay = 500,        
+    },
+    current_line_blame_formatter_opts = {
+        relative_time = true
+    }
+}
+
+require('telescope').setup {
+  pickers = {
+    buffers = {
+        theme = "dropdown",
+        previewer = false
+    },
+    find_files = {
+        theme = "dropdown",
+        previewer= false
+    }
+  }
+}
+
+require("catppuccin").setup({
+	compile_path = vim.fn.stdpath("cache") .. "/catppuccin",
+	transparent_background = false,
+	term_colors = false,
+	dim_inactive = {
+		enabled = false,
+		shade = "dark",
+		percentage = 0.15,
+	},
+	integrations = {
+		gitsigns = true,
+		nvimtree = true,
+		telescope = true,
+		treesitter = true,
+	},
+})
+EOF
+" what feels like the end is often the beginning
