@@ -10,6 +10,7 @@ endif
 " plugins 
 call plug#begin($plugindir)
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
