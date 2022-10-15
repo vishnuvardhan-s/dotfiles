@@ -1,5 +1,6 @@
 @echo off
-cd /d D:\Projects
+cd /d E:\Projects
+if "%1"=="." (cd /d C:\Users\vishn\AppData\Local\nvim)
 if "%1"=="cat" (cd catprep.in)
 if "%1"=="leet" (cd leetcode-custom-themes)
 if "%1"=="search" (cd search-extension)
