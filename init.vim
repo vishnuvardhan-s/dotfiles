@@ -1,10 +1,12 @@
 " variables
 let $plugindir = '~/.config/nvim/plugged'
 let $undodir = '/tmp/.vim-undo-dir' 
+let $sessionsdir = '~/.config/nvim/sessions/'
 
 if has("win32")
     let $plugindir = 'C:\Users\vishn\AppData\Local\nvim\plugged'
     let $undodir = 'C:\Users\vishn\AppData\Local\nvim\tmp\.vim-undo-dir'
+    let $sessionsdir = 'C:\Users\vishn\AppData\Local\nvim\sessions\'
 endif
 
 " plugins 
@@ -48,6 +50,10 @@ syntax on                                            " syntax highlighting
 filetype plugin indent on                            " allows auto-indenting depending on file type
 colorscheme catppuccin                               " color scheme
 
+function ConstructSessionFileName()
+    return $sessionsdir . substitute(getcwd(), '^.*\', '', '') . '.vim'
+endfunction
+
 " leader mappings
 let mapleader=" "
 nnoremap <SPACE> <Nop>
@@ -72,6 +78,9 @@ nnoremap <leader>gd :Gitsigns diffthis<CR>
 nnoremap <leader>gc :Telescope git_commits<CR>
 nnoremap <leader>gb :Telescope git_branches<CR>
 nnoremap <leader>gs :Telescope git_status<CR>
+nnoremap <leader>bs :mksession! <C-R>=ConstructSessionFileName()<CR><CR>
+nnoremap <leader>bo :source <C-R>=ConstructSessionFileName()<CR><CR>
+nnoremap <leader>br :!rm <C-R>=ConstructSessionFileName()<CR>
 
 " arrow mappings
 nnoremap <up> <C-w><up>
