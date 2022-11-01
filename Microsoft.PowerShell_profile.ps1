@@ -3,6 +3,8 @@ oh-my-posh init pwsh --config "C:\Users\vishn\AppData\Local\Programs\oh-my-posh\
 
 # aliases
 New-Alias -Name v -Value nvim
+New-Alias -Name touch -Value New-Item
+New-Alias -Name trash -Value Remove-ItemSafely
 
 # functions
 function To {
@@ -38,7 +40,7 @@ function To {
 
 function Config {
     To "dot"
-    nvim init.vim
+    nvim init.lua
 }
 
 function gs {
