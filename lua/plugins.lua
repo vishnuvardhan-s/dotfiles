@@ -34,22 +34,6 @@ return require('packer').startup(function(use)
         end
     }
 
-    use { 
-        'nvim-treesitter/nvim-treesitter', run = ':TSUpdate',
-        config = function()
-            require 'nvim-treesitter.configs'.setup {
-                auto_install = true,
-                highlight = {
-                    enable = true,
-                },
-            }
-            require 'nvim-treesitter.install'.compilers = {
-                'clang'
-            }
-            require 'nvim-treesitter.install'.prefer_git = true
-        end
-    }
-
     use {
         'nvim-telescope/telescope.nvim', tag = '0.1.x',
         requires = { 'nvim-lua/plenary.nvim' },
