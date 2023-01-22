@@ -89,6 +89,29 @@ return require('packer').startup(function(use)
     }
 
     use {
+        "akinsho/toggleterm.nvim",
+        tag = '*',
+        config = function()
+            require("toggleterm").setup {
+                open_mapping = [[<C-\>]],
+                direction = "float",
+                hide_numbers = true,
+                shade_terminals = true,
+                persist_mode = true,
+                insert_mappings = true,
+                terminal_mappings = true,
+                persist_size = true,
+                close_on_exit = true,
+                shell = vim.o.shell,
+                float_opts = {
+                    border = "curved",
+                    winblend = 3,
+                }
+            }
+        end
+    }
+
+    use {
         'catppuccin/nvim',
         as = 'catppuccin',
         config = function()
