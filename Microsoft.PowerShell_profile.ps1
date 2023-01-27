@@ -17,6 +17,19 @@ Set-PSReadLineOption -Colors @{ InlinePrediction = '#808080'}
 # default location
 Set-Location E:\Develop
 
+# vim mode for typing commands
+$ESC = "$([char]0x1b)"
+$OnViModeChange = [scriptblock] {
+    if ($args[0] -eq 'Command') {
+        Write-Host -NoNewLine "${ESC}[1 q"
+    }
+    else {
+        Write-Host -NoNewLine "${ESC}[5 q"
+    }
+}
+Set-PsReadLineOption -EditMode Vi -BellStyle None
+Set-PSReadLineOption -ViModeIndicator Script -ViModeChangeHandler $OnViModeChange
+
 # functions
 function To {
     param (

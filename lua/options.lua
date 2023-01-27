@@ -20,7 +20,6 @@ vim.o.wrap = false
 vim.o.backup = false
 vim.o.writebackup = false
 vim.o.mouse = 'a'
-vim.o.clipboard = 'unnamedplus'
 vim.o.undodir = undodir
 vim.o.signcolumn = 'yes'
 vim.o.termguicolors = true
